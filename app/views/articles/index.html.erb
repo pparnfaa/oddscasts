@@ -1,14 +1,25 @@
 <p style="color: green"><%= notice %></p>
-
 <% content_for :title, "Articles" %>
-
-<h1>Articles</h1>
-
-<div id="articles">
-  <% @articles.each do |article| %>
-    <%= render article %>
-    <p>
-      <%= link_to "Show this article", article %>
-    </p>
-  <% end %>
+<div class="bg-purple-600">
+  <div class="h-100">
+    <span>
+    </span>
+  </div>
+  <div class="bg-amber-100 p-5 mt-10">
+    <div>
+      <p class="font-bold text-2xl">All</p>
+    </div>
+    <div>
+      <div id="articles" class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-5">
+        <% @articles.each do |article| %>
+          <div class="p-4 bg-white rounded shadow">
+            <%= render article %>
+            <p class="underline mt-2">
+              <%= link_to "Show this article", article %>
+            </p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
 </div>
