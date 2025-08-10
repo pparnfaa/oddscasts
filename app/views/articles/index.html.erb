@@ -1,21 +1,94 @@
 <p style="color: green"><%= notice %></p>
 <% content_for :title, "Articles" %>
-<div class="bg-purple-600">
-  <div class="h-100">
-    <%# <%= image_tag "banner.jpg", alt: "Example Image", class: "w-full h-full object-cover" %>
+<div class="mx-auto">
+  <div>
+    <%= image_tag "banner.jpg", class: "w-full h-150 object-cover" %>
   </div>
-  <div class="bg-amber-100 p-5 mt-10">
+  <div class="bg-amber-100 p-5">
     <div>
-      <p class="font-bold text-2xl">All</p>
+      <p class="font-bold text-3xl text-gray-800 border-b-6 border-pink-400 inline-block pb-1">
+        New
+      </p>
     </div>
     <div>
-      <div id="articles" class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-5">
+      <div id="articles" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
         <% @articles.each do |article| %>
-          <div class="p-4 bg-white rounded shadow">
-            <%= render article %>
-            <p class="underline mt-2">
-              <%= link_to "Show this article", article %>
-            </p>
+          <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col">
+            <!-- รูปภาพด้านบน -->
+            <%= image_tag "poster.jpg", class: "w-full h-48 object-cover" %>
+            <!-- เนื้อหาการ์ด -->
+            <div class="p-4 flex-grow">
+              <h2 class="text-lg font-bold text-gray-800">
+                <%= article.title %>
+              </h2>
+              <p class="text-gray-600 mt-2 line-clamp-3">
+                <%= truncate(article.description, length: 100) %>
+              </p>
+            </div>
+            <!-- ปุ่มด้านล่าง -->
+            <div class="p-4 bg-white">
+              <%= link_to "Show this article", article, class: "bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="bg-amber-100 p-5">
+    <div>
+      <p class="font-bold text-3xl text-gray-800 border-b-6 border-pink-400 inline-block pb-1">
+        All
+      </p>
+    </div>
+    <div>
+      <div id="articles" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
+        <% @articles.each do |article| %>
+          <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col">
+            <!-- รูปภาพด้านบน -->
+            <%= image_tag "poster.jpg", class: "w-full h-48 object-cover" %>
+            <!-- เนื้อหาการ์ด -->
+            <div class="p-4 flex-grow">
+              <h2 class="text-lg font-bold text-gray-800">
+                <%= article.title %>
+              </h2>
+              <p class="text-gray-600 mt-2 line-clamp-3">
+                <%= truncate(article.description, length: 100) %>
+              </p>
+            </div>
+            <!-- ปุ่มด้านล่าง -->
+            <div class="p-4 bg-white">
+              <%= link_to "Show this article", article, class: "bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="bg-amber-100 p-5">
+    <div>
+      <p class="font-bold text-3xl text-gray-800 border-b-6 border-pink-400 inline-block pb-1">
+        Recommend
+      </p>
+    </div>
+    <div>
+      <div id="articles" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
+        <% @articles.each do |article| %>
+          <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col">
+            <!-- รูปภาพด้านบน -->
+            <%= image_tag "poster.jpg", class: "w-full h-48 object-cover" %>
+            <!-- เนื้อหาการ์ด -->
+            <div class="p-4 flex-grow">
+              <h2 class="text-lg font-bold text-gray-800">
+                <%= article.title %>
+              </h2>
+              <p class="text-gray-600 mt-2 line-clamp-3">
+                <%= truncate(article.description, length: 100) %>
+              </p>
+            </div>
+            <!-- ปุ่มด้านล่าง -->
+            <div class="p-4 bg-white">
+              <%= link_to "Show this article", article, class: "bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300" %>
+            </div>
           </div>
         <% end %>
       </div>
