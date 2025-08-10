@@ -5,6 +5,7 @@ module Admin
     # GET /admin/articles or /admin/articles.json
     def index
       @articles = Article.all
+      @statuses = Article.statuses.keys
     end
 
     # GET /admin/articles/1 or /admin/articles/1.json
@@ -72,19 +73,18 @@ module Admin
       end
     end
 
-    # def submit
-    # if @article.update(article_params.merge(status: : waiting_for))
-    #   redirect_to [:admin, @article], notice: "Article was sucessful"
-    # else
-    #   ???
-    # end
-    # end
-
     def approve
+      @article = Article.find(params[:id])
+      @article.update(status: :published)
+      redirect_to admin_article_path(@article), notice: "Article approved and published."
     end
 
     def reject
+      @article = Article.find(params[:id])
+      @article.update(status: :draft)
+      redirect_to admin_article_path(@article), notice: "Article rejected and moved back to draft."
     end
+
 
     private
       # Use callbacks to share common setup or constraints between actions.

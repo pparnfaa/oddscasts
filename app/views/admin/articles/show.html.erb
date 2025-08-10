@@ -16,13 +16,37 @@
   <div class="prose prose-indigo max-w-none mb-12 mx-auto break-words whitespace-normal">
     <%= simple_format(@article.description) %>
   </div>
+  <!-- แสดงสถานะบทความ -->
+  <div class="mb-6 flex items-center gap-3">
+    <span class="text-gray-600 font-medium">Status:</span>
+    <span class="px-3 py-1 rounded-full text-sm font-semibold 
+    <%= case @article.status
+        when "draft" then "bg-gray-200 text-gray-800"
+        when "waiting_for_review" then "bg-yellow-100 text-yellow-800"
+        when "published" then "bg-green-100 text-green-800"
+        else "bg-gray-100 text-gray-600"
+        end %>">
+      <%= @article.status.humanize %>
+    </span>
+  </div>
+  <!-- ปุ่มอนุมัติ/ปฏิเสธ -->
+  <% if @article.status == "waiting_for_review" %>
+    <div class="mb-6 flex gap-4">
+      <%= button_to "Approve", approve_admin_article_path(@article), method: :patch,
+        data: { confirm: "Approve this article?" },
+        class: "bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-5 rounded-lg transition-colors duration-300" %>
+      <%= button_to "Reject", reject_admin_article_path(@article), method: :patch,
+        data: { confirm: "Reject and move back to draft?" },
+        class: "bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-5 rounded-lg transition-colors duration-300" %>
+    </div>
+  <% end %>
   <!-- ปุ่มจัดการบทความ -->
-  <div class="flex flex-wrap justify-center gap-6 mb-20">
+  <div class="flex flex-wrap justify-start gap-6 mb-20">
     <%= link_to "Edit this article", edit_admin_article_path(@article),
-        class: "bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-6 rounded transition-colors duration-300" %>
+        class: "bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-300" %>
     <%= link_to "Back to articles", admin_articles_path,
-        class: "bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-6 rounded transition" %>
+        class: "bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-6 rounded-lg transition" %>
     <%= button_to "Destroy this article", [:admin, @article], method: :delete, data: { confirm: "Are you sure?" },
-        class: "bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded transition" %>
+        class: "bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-lg transition" %>
   </div>
 </div>
