@@ -1,103 +1,35 @@
 <p style="color: green"><%= notice %></p>
 <% content_for :title, "Articles" %>
+<% statuses = ["draft", "waiting_for_review", "published"] %>
 <div class="mx-auto">
   <div>
     <%= image_tag "banner.jpg", class: "w-full h-150 object-cover" %>
   </div>
-  <div class="bg-amber-100 p-5">
-    <div class="flex justify-between items-center">
-      <p class="font-bold text-3xl text-gray-800 border-b-6 border-pink-400 inline-block pb-1">
-        New
-      </p>
-      <%= link_to "New article", new_admin_article_path,
-          class: "bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300" %>
-    </div>
-    <div>
-      <div id="articles" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
-        <% @articles.each do |article| %>
-          <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col">
-            <!-- รูปภาพด้านบน -->
-            <%= image_tag "poster.jpg", class: "w-full h-48 object-cover" %>
-            <!-- เนื้อหาการ์ด -->
-            <div class="p-4 flex-grow">
-              <h2 class="text-lg font-bold text-gray-800">
-                <%= article.title %>
-              </h2>
-              <p class="text-gray-600 mt-2 line-clamp-3">
-                <%= truncate(article.description, length: 100) %>
-              </p>
+  <% statuses.each do |status| %>
+    <div class="bg-sky-50 p-5 rounded-lg">
+      <div class="flex justify-between items-center">
+        <p class="font-bold text-3xl text-gray-800 border-b-6 border-sky-600 inline-block pb-1 capitalize">
+          <%= status.humanize %>
+        </p>
+        <%= link_to "New article", new_admin_article_path,
+            class: "bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300" %>
+      </div>
+      <div>
+        <div id="articles" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
+          <% @articles.select { |a| a.status == status }.each do |article| %>
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col">
+              <%= image_tag article.cover_image.attached? ? url_for(article.cover_image) : "poster.jpg", class: "w-full h-68 object-cover" %>
+              <div class="p-4 flex-grow">
+                <h2 class="text-lg font-bold text-gray-800"><%= article.title %></h2>
+                <p class="text-gray-600 mt-2 line-clamp-3"><%= truncate(article.description, length: 100) %></p>
+              </div>
+              <div class="p-4 bg-white">
+                <%= link_to "Show this article", [:admin, article], class: "bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300" %>
+              </div>
             </div>
-            <!-- ปุ่มด้านล่าง -->
-            <div class="p-4 bg-white">
-              <%= link_to "Show this article", [:admin, article], class: "bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300" %>
-            </div>
-          </div>
-        <% end %>
+          <% end %>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="bg-amber-100 p-5">
-    <div class="flex justify-between items-center">
-      <p class="font-bold text-3xl text-gray-800 border-b-6 border-pink-400 inline-block pb-1">
-        Hit
-      </p>
-      <%= link_to "New article", new_admin_article_path,
-          class: "bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300" %>
-    </div>
-    <div>
-      <div id="articles" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
-        <% @articles.each do |article| %>
-          <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col">
-            <!-- รูปภาพด้านบน -->
-            <%= image_tag "poster.jpg", class: "w-full h-48 object-cover" %>
-            <!-- เนื้อหาการ์ด -->
-            <div class="p-4 flex-grow">
-              <h2 class="text-lg font-bold text-gray-800">
-                <%= article.title %>
-              </h2>
-              <p class="text-gray-600 mt-2 line-clamp-3">
-                <%= truncate(article.description, length: 100) %>
-              </p>
-            </div>
-            <!-- ปุ่มด้านล่าง -->
-            <div class="p-4 bg-white">
-              <%= link_to "Show this article", [:admin, article], class: "bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300" %>
-            </div>
-          </div>
-        <% end %>
-      </div>
-    </div>
-  </div>
-  <div class="bg-amber-100 p-5">
-    <div class="flex justify-between items-center">
-      <p class="font-bold text-3xl text-gray-800 border-b-6 border-pink-400 inline-block pb-1">
-        Recommend
-      </p>
-      <%= link_to "New article", new_admin_article_path,
-          class: "bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300" %>
-    </div>
-    <div>
-      <div id="articles" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
-        <% @articles.each do |article| %>
-          <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col">
-            <!-- รูปภาพด้านบน -->
-            <%= image_tag "poster.jpg", class: "w-full h-48 object-cover" %>
-            <!-- เนื้อหาการ์ด -->
-            <div class="p-4 flex-grow">
-              <h2 class="text-lg font-bold text-gray-800">
-                <%= article.title %>
-              </h2>
-              <p class="text-gray-600 mt-2 line-clamp-3">
-                <%= truncate(article.description, length: 100) %>
-              </p>
-            </div>
-            <!-- ปุ่มด้านล่าง -->
-            <div class="p-4 bg-white">
-              <%= link_to "Show this article", [:admin, article], class: "bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300" %>
-            </div>
-          </div>
-        <% end %>
-      </div>
-    </div>
-  </div>
+  <% end %>
 </div>

@@ -24,6 +24,12 @@ module Admin
     def create
       @article = Article.new(article_params)
 
+      if params[:commit_submit_review]
+        @article.status = :waiting_for_review
+      else
+        @article.status = :draft
+      end
+
       respond_to do |format|
         if @article.save
           format.html { redirect_to [ :admin, @article ], notice: "Article was successfully created." }
@@ -37,6 +43,13 @@ module Admin
 
     # PATCH/PUT /admin/articles/1 or /admin/articles/1.json
     def update
+      # อัปเดตสถานะก่อน เพราะจะใช้กับ update
+      if params[:commit_submit_review]
+        @article.status = :waiting_for_review
+      elsif params[:commit_save_draft]
+        @article.status = :draft
+      end
+
       respond_to do |format|
         if @article.update(article_params)
           format.html { redirect_to [ :admin, @article ], notice: "Article was successfully updated.", status: :see_other }
@@ -48,6 +61,7 @@ module Admin
       end
     end
 
+
     # DELETE /admin/articles/1 or /admin/articles/1.json
     def destroy
       @article.destroy!
@@ -58,6 +72,20 @@ module Admin
       end
     end
 
+    # def submit
+    # if @article.update(article_params.merge(status: : waiting_for))
+    #   redirect_to [:admin, @article], notice: "Article was sucessful"
+    # else
+    #   ???
+    # end
+    # end
+
+    def approve
+    end
+
+    def reject
+    end
+
     private
       # Use callbacks to share common setup or constraints between actions.
       def set_article
@@ -66,7 +94,7 @@ module Admin
 
       # Only allow a list of trusted parameters through.
       def article_params
-        params.expect(article: [ :title, :description ])
+        params.expect(article: [ :title, :description, :cover_image ])
       end
   end
 end
