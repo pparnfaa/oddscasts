@@ -1,37 +1,68 @@
-<p style="color: green"><%= notice %></p>
 <% content_for :title, "Articles" %>
-<% statuses = ["draft", "waiting_for_review", "published"] %>
-<div class="mx-auto">
-  <div>
-    <%= image_tag "banner.jpg", class: "w-full h-150 object-cover" %>
-  </div>
-  <% @statuses.each do |status| %>
-    <div class="bg-sky-50 p-5 rounded-lg">
-      <div class="flex justify-between items-center">
-        <p class="font-bold text-3xl text-gray-800 border-b-6 border-sky-600 inline-block pb-1 capitalize">
+<div class="min-h-screen bg-gray-50 flex">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white/80 backdrop-blur-md shadow-lg border-r border-white/20 p-6 flex flex-col rounded-r-3xl">
+    <h2 class="text-lg font-bold text-sky-700 mb-4">Menu</h2>
+    <!-- Create article button -->
+    <%= link_to "Create Article", new_admin_article_path,
+        class: "mb-6 bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:shadow transition-all duration-300 text-center" %>
+    <!-- Status filter -->
+    <nav class="space-y-2">
+      <!-- All articles -->
+      <%= link_to admin_articles_path(status: "all"),
+          class: "block px-4 py-2 rounded-lg font-medium transition-colors duration-200 #{params[:status] == 'all' || params[:status].blank? ? 'bg-sky-100 text-sky-700 font-semibold' : 'text-gray-700 hover:bg-gray-100'}" do %>
+        All
+      <% end %>
+      <% @statuses.each do |status| %>
+        <%= link_to admin_articles_path(status: status),
+            class: "block px-4 py-2 rounded-lg font-medium transition-colors duration-200 #{params[:status] == status ? 'bg-sky-100 text-sky-700 font-semibold' : 'text-gray-700 hover:bg-gray-100'}" do %>
           <%= status.humanize %>
-        </p>
-        <% if status == "draft" %>
-          <%= link_to "New article", new_admin_article_path,
-          class: "bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300" %>
         <% end %>
-      </div>
-      <div>
-        <div id="articles" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
-          <% @articles.select { |a| a.status == status }.each do |article| %>
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col">
-              <%= image_tag article.cover_image.attached? ? url_for(article.cover_image) : "poster.jpg", class: "w-full h-68 object-cover" %>
-              <div class="p-4 flex-grow">
-                <h2 class="text-lg font-bold text-gray-800 line-clamp-2"><%= article.title %></h2>
-                <p class="text-gray-600 mt-2 line-clamp-3"><%= truncate(article.description, length: 100) %></p>
-              </div>
-              <div class="p-4 bg-white">
-                <%= link_to "Show this article", [:admin, article], class: "bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300" %>
-              </div>
+      <% end %>
+    </nav>
+  </aside>
+  <!-- Main content -->
+  <main class="flex-1 p-8">
+    <h1 class="text-3xl font-extrabold text-gray-800 mb-8">
+      Articles <%= "(#{params[:status]&.humanize || 'All'})" %>
+    </h1>
+    <% current_status = params[:status] %>
+    <% filtered_articles = if current_status.blank? || current_status == "all"
+                            @articles
+                          else
+                            @articles.select { |a| a.status == current_status }
+                          end %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% filtered_articles.each do |article| %>
+        <div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col border border-gray-100">
+          <%= image_tag article.cover_image.attached? ? url_for(article.cover_image) : "poster.jpg",
+            class: "w-full h-48 object-cover" %>
+          <div class="p-5 flex-grow">
+            <div class="flex justify-between items-start mb-2">
+              <h2 class="text-lg font-bold text-gray-900 line-clamp-2"><%= article.title %></h2>
+              <!-- Badge status -->
+              <% badge_color = case article.status
+                             when "draft" then "bg-gray-200 text-gray-800"
+                             when "waiting_for_review" then "bg-yellow-100 text-yellow-800"
+                             when "published" then "bg-green-100 text-green-800"
+                             else "bg-gray-100 text-gray-800"
+                             end %>
+              <span class="text-xs font-semibold px-2 py-1 rounded-full <%= badge_color %>">
+                <%= article.status == "waiting_for_review" ? "Waiting" : article.status.humanize %>
+              </span>
             </div>
-          <% end %>
+            <p class="text-gray-600 text-sm line-clamp-3">
+              <%= truncate(article.description, length: 100) %>
+            </p>
+          </div>
+          <div class="p-4 border-t border-gray-100 bg-gray-50 flex justify-between">
+            <%= link_to "View", [:admin, article],
+              class: "bg-sky-600 hover:bg-sky-700 text-white font-semibold py-1 px-3 rounded-lg text-sm transition-colors duration-300" %>
+            <%= link_to "Edit", edit_admin_article_path(article),
+              class: "bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-1 px-3 rounded-lg text-sm transition-colors duration-300" %>
+          </div>
         </div>
-      </div>
+      <% end %>
     </div>
-  <% end %>
+  </main>
 </div>
