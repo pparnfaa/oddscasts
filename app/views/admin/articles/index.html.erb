@@ -5,7 +5,8 @@
     <h2 class="text-lg font-bold text-sky-700 mb-4">Menu</h2>
     <!-- Create article button -->
     <%= link_to "Create Article", new_admin_article_path,
-        class: "mb-6 bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:shadow transition-all duration-300 text-center" %>
+    class: "mb-6 bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:shadow transition-all duration-300 text-center",
+    data: { testid: "new-article" } %>
     <!-- Status filter -->
     <nav class="space-y-2">
       <!-- All articles -->
@@ -39,7 +40,10 @@
             class: "w-full h-48 object-cover" %>
           <div class="p-5 flex-grow">
             <div class="flex justify-between items-start mb-2">
-              <h2 class="text-lg font-bold text-gray-900 line-clamp-2"><%= article.title %></h2>
+              <h2 class="text-lg font-bold text-gray-900 line-clamp-2" data-testid="article-title">
+                <%= article.title %>
+              </h2>
+
               <!-- Badge status -->
               <% badge_color = case article.status
                              when "draft" then "bg-gray-200 text-gray-800"
